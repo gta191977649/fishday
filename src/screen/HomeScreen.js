@@ -8,42 +8,52 @@ export default class Home extends Component {
     super(props);
     this.state={
       timer:30,
-      showSetTimerScreen:false
+      tag:"Study",
+      showTagScreen:false
     }
   }
   setTimer(timer) {
     this.setState({timer: timer})
   }
- /*
-  setTimerScreen() {
+  showSetTagScreen() {
     return (
-      <Modal isVisible={this.state.showSetTimerScreen} style={{ flex: 1, alignItems: 'center', justifyContent: 'center',backgroundColor:"white" }}>
-        <View style={{flex: 1}}>
-          <Text style={{fontSize:40,marginTop:20}}>TIMER SET</Text>
-          <Item style={{height:60,marginTop:30}} regular>
-          <Input style={{textAlign:"center",fontSize:30}} keyboardType={'numeric'} placeholder="Timer" onChangeText={ (val) =>{ this.setState({timer:val}) }}>{this.state.timer}</Input>
-          </Item>
-            <Text style={{textAlign:"center",marginTop:10}}>Minutes</Text>
-            <Button style={{alignSelf:"center",marginTop:"auto",marginBottom:20}}
-             onPress={()=>{
-              this.setState({showSetTimerScreen:false})
-             }}>
-              <Text>SET</Text>
+      <View>
+        <Modal  isVisible={this.state.showTagScreen}>
+          <View style={{ flex: 1,backgroundColor:"white",alignItems:"center" }}>
+            <Text style={{fontSize:30,marginTop:20}}>TAG</Text>
+            <Button style={{alignSelf:'center',marginTop:10,width:"80%"  }} bordered onPress={()=>{
+              this.setState({tag:"Study",showTagScreen:false})
+            }}>
+              <Text style={{textAlign:"center",width:"100%"}}>Study</Text>
             </Button>
-        </View>
-    
-      </Modal>
+            <Button style={{alignSelf:'center',marginTop:10,width:"80%"  }} bordered onPress={()=>{
+              this.setState({tag:"Working",showTagScreen:false})
+            }}>
+              <Text style={{textAlign:"center",width:"100%"}}>Working</Text>
+            </Button>
+            <Button style={{alignSelf:'center',marginTop:10,width:"80%"  }} bordered onPress={()=>{
+              this.setState({tag:"Sleep",showTagScreen:false})
+            }}>
+              <Text style={{textAlign:"center",width:"100%"}}>Sleep</Text>
+            </Button>
+            <Button style={{alignSelf:'center',marginTop:10,width:"80%"  }} bordered onPress={()=>{
+              this.setState({tag:"Excerise",showTagScreen:false})
+            }}> 
+              <Text style={{textAlign:"center",width:"100%"}}>Excerise</Text>
+            </Button>
+           
+          </View>
+        </Modal>
+      </View>
     )
-
   }
-*/
   render() {
     return (
       <Container>
          
         <Header transparent>
           <Left>
-            <Button transparent >
+            <Button transparent onPress={this.props.navigation.openDrawer}>
               <Icon name='menu' style={{color: "black"}}/>
             </Button>
           </Left>
@@ -55,11 +65,14 @@ export default class Home extends Component {
           </Right>
         </Header>
         <Content contentContainerStyle={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Button style={{alignSelf:'center',marginTop:"50%" }} onPress={() =>{ this.props.navigation.navigate("TimerScreen",{timer:this.state.timer}) }} bordered large>
+          {this.showSetTagScreen()}
+          <Button style={{alignSelf:'center',marginTop:"50%" }} onPress={() =>{ this.props.navigation.navigate("TimerScreen",{timer:this.state.timer,tag:this.state.tag}) }} large>
             <Text>START</Text>
           </Button>
-          <Button style={{alignSelf:'center',marginTop:10  }} bordered >
-            <Text>TAG</Text>
+          <Button style={{alignSelf:'center',marginTop:10  }} bordered onPress={()=>{
+            this.setState({ showTagScreen:true})
+          }}>
+            <Text>{this.state.tag}</Text>
           </Button>
           <Button style={{width:140 ,alignSelf:'center',marginTop:10,marginTop:"auto",marginBottom:20}} bordered >
               <Picker
