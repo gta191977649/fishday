@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, View,Text } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   DrawerContentScrollView,
@@ -9,9 +10,8 @@ import {
 } from '@react-navigation/drawer';
 
 //Activites
-
 import HomeScreen from "./src/screen/HomeScreen"
-
+import TimerScreen from "./src/screen/TimerScreen"
 
 
 function NotificationsScreen({ navigation }) {
@@ -30,11 +30,11 @@ function NotificationsScreen({ navigation }) {
 }
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
-export default function App() {
+function DraweContainer () {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home" drawerContent={props => {
+    <Drawer.Navigator initialRouteName="Home" drawerContent={props => {
       return (
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
@@ -46,6 +46,17 @@ export default function App() {
         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
         
       </Drawer.Navigator>
+  )
+}
+export default function App() {
+  return (
+    <NavigationContainer>
+     <Stack.Navigator headerMode="none">
+       <Stack.Screen name="Main" component={DraweContainer}/>
+       <Stack.Screen name="TimerScreen" component={TimerScreen} />
+
+     </Stack.Navigator>
+      
     </NavigationContainer>
   );
 }
