@@ -9,7 +9,12 @@ export default class Home extends Component {
     this.state={
       timer:30,
       tag:"Study",
-      showTagScreen:false
+      showTagScreen:false,
+      user:{
+        collection:[
+          {"name":"test",cost:1}
+        ],
+      }
     }
   }
   setTimer(timer) {

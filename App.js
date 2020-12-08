@@ -12,6 +12,11 @@ import {
 //Activites
 import HomeScreen from "./src/screen/HomeScreen"
 import TimerScreen from "./src/screen/TimerScreen"
+import CollectionScreen from "./src/screen/CollectionScreen"
+//Redux
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
 
 
 function NotificationsScreen({ navigation }) {
@@ -44,6 +49,7 @@ function DraweContainer () {
       }}>
         <Drawer.Screen name="Home" component={HomeScreen} />
         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+        <Drawer.Screen name="Collection" component={CollectionScreen} />
         
       </Drawer.Navigator>
   )
