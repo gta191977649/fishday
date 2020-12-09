@@ -14,10 +14,30 @@ import HomeScreen from "./src/screen/HomeScreen"
 import TimerScreen from "./src/screen/TimerScreen"
 import CollectionScreen from "./src/screen/CollectionScreen"
 //Redux
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { Provider,connect } from 'react-redux';
+import { createStore,combineReducers } from 'redux';
+import { AppReducer } from "./src/reducer/Reducer"
 
+const reducer = combineReducers({data: AppReducer});
+const initialState = {
+  collecitons: []
+}
 
+let store = createStore(reducer,initialState)
+
+const mapStateToProps = (state) => {
+  return {
+    state: state.collecitons
+  }
+}
+const mapDispatchToProps = (dispatch) =>{
+  return {
+    updateCollection : () => dispatch({
+      type:"ADD_COLLECTIONS",
+      payload:"test"
+    })
+  }
+}
 
 function NotificationsScreen({ navigation }) {
   return (
@@ -33,6 +53,8 @@ function NotificationsScreen({ navigation }) {
     </View>
   );
 }
+
+
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -54,15 +76,23 @@ function DraweContainer () {
       </Drawer.Navigator>
   )
 }
-export default function App() {
-  return (
-    <NavigationContainer>
-     <Stack.Navigator headerMode="none">
-       <Stack.Screen name="Main" component={DraweContainer}/>
-       <Stack.Screen name="TimerScreen" component={TimerScreen} />
 
-     </Stack.Navigator>
-      
-    </NavigationContainer>
+let Root = (props) => { return (
+  <NavigationContainer>
+    <Stack.Navigator headerMode="none">
+    <Stack.Screen name="Main" component={DraweContainer}/>
+    <Stack.Screen name="TimerScreen" component={TimerScreen} />
+    </Stack.Navigator>
+  </NavigationContainer>
+)}
+
+Root = connect(mapStateToProps,mapDispatchToProps)(Root)
+const App = function App() {
+  return (
+    <Provider store={store}>
+      <Root/>
+    </Provider>
   );
 }
+
+export default App

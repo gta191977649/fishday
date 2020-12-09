@@ -23,6 +23,7 @@ export default class TimerScreen extends Component {
     },1000)
     this.setState({timer:timer})
     AppState.addEventListener('change', this._handleAppStateChange);
+
   }
   componentWillUnmount() {
     

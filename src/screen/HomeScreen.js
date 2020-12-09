@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {View} from "react-native"
 import Modal from 'react-native-modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {Picker,Item,Input, Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 export default class Home extends Component {
@@ -20,6 +21,24 @@ export default class Home extends Component {
   setTimer(timer) {
     this.setState({timer: timer})
   }
+  async storeData (value) {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('data', jsonValue)
+    } catch (e) {
+      // saving error
+    }
+  }
+
+  async getData () {
+    try {
+      const jsonValue = await AsyncStorage.getItem('data')
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+      // error reading value
+    }
+  }
+
   showSetTagScreen() {
     return (
       <View>
@@ -78,6 +97,19 @@ export default class Home extends Component {
             this.setState({ showTagScreen:true})
           }}>
             <Text>{this.state.tag}</Text>
+          </Button>
+          <Button style={{alignSelf:'center',marginTop:10  }} bordered onPress={()=>{
+             this.storeData({
+              collection:[
+                {name:"122",cost:1}
+              ]
+            })
+            this.getData().then(data=>{
+              console.log(data)
+            })
+            
+          }}>
+            <Text>Test</Text>
           </Button>
           <Button style={{width:140 ,alignSelf:'center',marginTop:10,marginTop:"auto",marginBottom:20}} bordered >
               <Picker

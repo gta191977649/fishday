@@ -8,19 +8,6 @@ export default class CollectionScreen extends Component {
         this.state = {
             collection: [
               {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
-              {name:"aa",cost:1},
             ]
         }
 
