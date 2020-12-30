@@ -1,34 +1,29 @@
 import React, { Component } from 'react'
 import { ScrollView,View } from 'react-native'
-import { Card, CardItem,Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
-
+import { Thumbnail,List, ListItem,Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import fish from "../res/fish.png"
 export default class CollectionScreen extends Component {
     constructor(props){
         super(props)
-        this.state = {
-            collection: [
-              {name:"aa",cost:1},
-            ]
-        }
-
     }
     componentDidMount() {
 
         //this.setState({collection:this.props.route.params.collection})
     }
     renderItems() {
-        const items = this.state.collection.map((item,idx) =>
-            <Card key={idx}>
-                <CardItem>
-                    <Body>
-                        <Text>
-                            {item.name}
-                        </Text>
-                    </Body>
-                </CardItem>
-            </Card>
+        const items = this.props.collections.map((item,idx) =>
+            <ListItem avatar key={idx}>
+                <Left>
+                    <Thumbnail source={fish} />
+                </Left>
+                <Body>
+                    <Text>{item.name}</Text>
+                    <Text note>${item.cost}</Text>
+                </Body>
+               
+            </ListItem>
         )
-        return items
+        return <List>{items}</List> 
     }
     render() {
         
@@ -49,7 +44,7 @@ export default class CollectionScreen extends Component {
         </Header>
             <Content contentContainerStyle={{ flex: 1,paddingLeft: 5,paddingRight: 5}}>
                 <ScrollView>
-                    {this.state.collection.length > 0 ? this.renderItems() : <Text> No item</Text>}
+                    {this.props.collections.length > 0 ? this.renderItems() : <Text> No item</Text>}
                 </ScrollView>
             </Content>
             

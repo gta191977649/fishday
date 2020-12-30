@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,AppState} from 'react-native';
+import { Alert,View,AppState} from 'react-native';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 
 export default class TimerScreen extends Component {
@@ -9,8 +9,16 @@ export default class TimerScreen extends Component {
         coutDownMins: 1,
         timer:null,
         appState: AppState.currentState,
-        status:"idle"
+        status:"idle",
+        lootFish: [],
     };
+  }
+  //当时间到了，随机给玩家钓上鱼
+  giveFish() {
+    let reward = { name:"Test Looted Fish",cost:1 } 
+    this.props.addCollection(reward)
+    this.setState({ lootFish: [...this.state.lootFish,reward]})
+
   }
   componentDidMount() {
     console.log(this.props.route.params.timer )
@@ -19,6 +27,14 @@ export default class TimerScreen extends Component {
     let parent = this
     
     let timer = setInterval(()=> {
+      if(parent.state.coutDownMins <= 0 ){ 
+        clearInterval(timer)
+        this.giveFish()
+        this.props.navigation.pop()
+        this.props.navigation.navigate("LootScreen",{rewards:this.state.lootFish})
+        
+        return
+      }
       parent.setState({coutDownMins:parent.state.coutDownMins-1})
     },1000)
     this.setState({timer:timer})
@@ -52,7 +68,22 @@ export default class TimerScreen extends Component {
       <Text style={{ fontSize:50,marginTop:20 }}>{this.renderTiemrFormat(this.state.coutDownMins)}</Text>
       <Text>{this.props.route.params.tag}</Text>
       <Button style={{alignSelf:'center',marginTop:10,marginTop:"auto",marginBottom:20  }}
-        onPress={() =>{ this.props.navigation.navigate("Home") }}
+        onPress={() =>{ 
+          Alert.alert(
+            "Give up",
+            "Are you sure?",
+            [
+              {
+                text: "No",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              { text: "Sure", onPress: () => this.props.navigation.navigate("Home")  }
+            ],
+            { cancelable: false }
+          );
+          
+        }}
       bordered>
         <Text>
           Give Up

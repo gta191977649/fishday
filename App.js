@@ -13,28 +13,40 @@ import {
 import HomeScreen from "./src/screen/HomeScreen"
 import TimerScreen from "./src/screen/TimerScreen"
 import CollectionScreen from "./src/screen/CollectionScreen"
+import LootScreen from "./src/screen/LootScreen"
 //Redux
 import { Provider,connect } from 'react-redux';
 import { createStore,combineReducers } from 'redux';
 import { AppReducer } from "./src/reducer/Reducer"
 
-const reducer = combineReducers({data: AppReducer});
+
 const initialState = {
-  collecitons: []
+  collecitons: [],
+  test: "Redux Test",
 }
 
-let store = createStore(reducer,initialState)
+
+const reducer = (state = initialState,action)=> {
+  switch(action.type) {
+    case "ADD_COLLECTION": {
+      return { ...state, collecitons:[...state.collecitons,action.payload] }
+    }
+  }
+  return state
+}
+const store = createStore(reducer)
 
 const mapStateToProps = (state) => {
   return {
-    state: state.collecitons
+    collections: state.collecitons,
+    test: state.test,
   }
 }
 const mapDispatchToProps = (dispatch) =>{
   return {
-    updateCollection : () => dispatch({
-      type:"ADD_COLLECTIONS",
-      payload:"test"
+    addCollection : (fish) => dispatch({
+      type:"ADD_COLLECTION",
+      payload:fish
     })
   }
 }
@@ -60,6 +72,8 @@ const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 function DraweContainer () {
+  const Home = connect(mapStateToProps,mapDispatchToProps)(HomeScreen)
+  const Collection  = connect(mapStateToProps,mapDispatchToProps)(CollectionScreen)
   return (
     <Drawer.Navigator initialRouteName="Home" drawerContent={props => {
       return (
@@ -69,28 +83,27 @@ function DraweContainer () {
       </DrawerContentScrollView>
       )
       }}>
-        <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-        <Drawer.Screen name="Collection" component={CollectionScreen} />
+        <Drawer.Screen name="Collection" component={Collection} />
         
       </Drawer.Navigator>
   )
 }
+ 
 
-let Root = (props) => { return (
-  <NavigationContainer>
-    <Stack.Navigator headerMode="none">
-    <Stack.Screen name="Main" component={DraweContainer}/>
-    <Stack.Screen name="TimerScreen" component={TimerScreen} />
-    </Stack.Navigator>
-  </NavigationContainer>
-)}
 
-Root = connect(mapStateToProps,mapDispatchToProps)(Root)
 const App = function App() {
+  const Timer = connect(mapStateToProps,mapDispatchToProps)(TimerScreen)
   return (
     <Provider store={store}>
-      <Root/>
+      <NavigationContainer>
+      <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Main" component={DraweContainer}/>
+      <Stack.Screen name="TimerScreen" component={Timer} />
+      <Stack.Screen name="LootScreen" component={LootScreen} />
+      </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }

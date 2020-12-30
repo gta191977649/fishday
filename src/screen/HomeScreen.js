@@ -99,17 +99,13 @@ export default class Home extends Component {
             <Text>{this.state.tag}</Text>
           </Button>
           <Button style={{alignSelf:'center',marginTop:10  }} bordered onPress={()=>{
-             this.storeData({
-              collection:[
-                {name:"122",cost:1}
-              ]
-            })
-            this.getData().then(data=>{
-              console.log(data)
-            })
+             this.props.addCollection(
+              {name:"Test Fish",cost:1}
+             )
             
           }}>
             <Text>Test</Text>
+            
           </Button>
           <Button style={{width:140 ,alignSelf:'center',marginTop:10,marginTop:"auto",marginBottom:20}} bordered >
               <Picker
@@ -121,6 +117,7 @@ export default class Home extends Component {
                 this.setState({timer:val})
               }}
               >
+              <Picker.Item label="1 Mins" value={0.05} />
               <Picker.Item label="30 Mins" value={30} />
               <Picker.Item label="60 Mins" value={60} />
               <Picker.Item label="90 Mins" value={90} />
