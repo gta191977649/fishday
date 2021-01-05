@@ -14,12 +14,27 @@ export default class TimerScreen extends Component {
     };
   }
   //当时间到了，随机给玩家钓上鱼
+  randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  } 
   giveFish() {
-    let reward = { name:"Test Looted Fish",cost:1 } 
+    
+    const fish = [
+      { "name":"Fish Type 1", cost: 1 },
+      { "name":"Fish Type 2", cost: 2 },
+      { "name":"Fish Type 3", cost: 3 },
+      { "name":"Fish Type 4", cost: 4 },
+    ]
+
+    let idx = this.randomIntFromInterval(0,3)
+    console.log(idx)
+    let reward = fish[idx]
+
     this.props.addCollection(reward)
     this.setState({ lootFish: [...this.state.lootFish,reward]})
 
   }
+  
   componentDidMount() {
     console.log(this.props.route.params.timer )
     this.setState({coutDownMins:this.props.route.params.timer *60,status:"inprogress"})
