@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {View} from "react-native"
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AppHeader from  "./Header"
 import {Picker,Item,Input, Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 export default class Home extends Component {
   constructor(props) {
@@ -74,20 +74,8 @@ export default class Home extends Component {
   render() {
     return (
       <Container>
-         
-        <Header transparent>
-          <Left>
-            <Button transparent onPress={this.props.navigation.openDrawer}>
-              <Icon name='menu' style={{color: "black"}}/>
-            </Button>
-          </Left>
-          <Body>
-            <Title style={{color: "black"}}>Fish Day</Title>
-          </Body>
-          <Right >
-          <Text>$0 LV:1 EXP: 0%</Text>
-          </Right>
-        </Header>
+         <AppHeader player={this.props.player} title={"Fish Day"} nav={this.props.navigation}/>
+        
         <Content contentContainerStyle={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           {this.showSetTagScreen()}
           <Button style={{alignSelf:'center',marginTop:"50%" }} onPress={() =>{ this.props.navigation.navigate("TimerScreen",{timer:this.state.timer,tag:this.state.tag}) }} large>
@@ -102,7 +90,8 @@ export default class Home extends Component {
              this.props.addCollection(
               {name:"Test Fish",cost:1}
              )
-            
+             this.props.addExp(5)
+              this.forceUpdate()
           }}>
             <Text>Test</Text>
             

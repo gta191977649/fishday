@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Alert,View,AppState} from 'react-native';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import AppHeader from  "./Header"
 
+import Config from "../../GameConfig.json"
 export default class TimerScreen extends Component {
   constructor(props) {
     super(props);
@@ -45,6 +47,7 @@ export default class TimerScreen extends Component {
       if(parent.state.coutDownMins <= 0 ){ 
         clearInterval(timer)
         this.giveFish()
+        this.props.addExp(Config["30MinsExpRate"])
         this.props.navigation.pop()
         this.props.navigation.navigate("LootScreen",{rewards:this.state.lootFish})
         
@@ -52,6 +55,13 @@ export default class TimerScreen extends Component {
       }
       parent.setState({coutDownMins:parent.state.coutDownMins-1})
     },1000)
+
+    //每30 Mins给玩家 Exp
+    setInterval(()=> {
+      this.props.addExp(5)
+      parent.setState({coutDownMins:parent.state.coutDownMins-1})
+    },1000*60*30)
+
     this.setState({timer:timer})
     AppState.addEventListener('change', this._handleAppStateChange);
 
@@ -118,14 +128,7 @@ export default class TimerScreen extends Component {
   </React.Fragment>
     return (
       <Container>
-          <Header transparent>
-            <Left/>
-            <Body/>
-            <Right>
-                <Text>$0</Text>
-            </Right>
-
-          </Header>
+          <AppHeader player={this.props.player} title={"Timer"} nav={this.props.navigation}/>
           <Content contentContainerStyle={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             {this.state.status === "inprogress" ? InProgressScreen : FailScreen}
           </Content>

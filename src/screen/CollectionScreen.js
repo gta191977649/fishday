@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { ScrollView,View } from 'react-native'
 import { Thumbnail,List, ListItem,Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import fish from "../res/fish.png"
+import AppHeader from  "./Header"
+
 export default class CollectionScreen extends Component {
     constructor(props){
         super(props)
@@ -12,13 +14,13 @@ export default class CollectionScreen extends Component {
     }
     renderItems() {
         const items = this.props.collections.map((item,idx) =>
-            <ListItem avatar key={idx}>
+            <ListItem button={true} onPress={()=>{this.props.navigation.navigate("FishDetail",{fish:item})}} avatar key={idx}>
                 <Left>
                     <Thumbnail source={fish} />
                 </Left>
                 <Body>
                     <Text>{item.name}</Text>
-                    <Text note>${item.cost}</Text>
+                    <Text note>${item.cost} qty:{item.qty}</Text>
                 </Body>
                
             </ListItem>
@@ -29,19 +31,7 @@ export default class CollectionScreen extends Component {
         
         return (
             <Container>
-           <Header transparent>
-          <Left>
-            <Button transparent onPress={this.props.navigation.openDrawer}>
-              <Icon name='menu' style={{color: "black"}}/>
-            </Button>
-          </Left>
-          <Body>
-            <Title style={{color: "black"}}>Fish Day</Title>
-          </Body>
-          <Right >
-          <Text>$0 LV:1 EXP: 0%</Text>
-          </Right>
-        </Header>
+           <AppHeader player={this.props.player} title={"Collections"} nav={this.props.navigation}/>
             <Content contentContainerStyle={{ flex: 1,paddingLeft: 5,paddingRight: 5}}>
                 <ScrollView>
                     {this.props.collections.length > 0 ? this.renderItems() : <Text> No item</Text>}
