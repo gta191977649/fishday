@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment'; 
+
 import { Button, View,Text } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -16,6 +17,7 @@ import TimerScreen from "./src/screen/TimerScreen"
 import CollectionScreen from "./src/screen/CollectionScreen"
 import LootScreen from "./src/screen/LootScreen"
 import FishDetail from "./src/screen/FishDetail"
+import History from "./src/screen/History"
 //Redux
 import { Provider,connect } from 'react-redux';
 import { createStore,combineReducers } from 'redux';
@@ -29,6 +31,12 @@ const initialState = {
     exp: 0.0,
     cost: 0,
   },
+  records:{
+    focus: [
+      {time: 10,success:true,type:"Study",own: 5,date:"1/2/2021"},
+      
+    ]
+  },
   test: "Redux Test",
 }
 
@@ -36,7 +44,10 @@ const reducer = (state = initialState,action)=> {
   function calcCost(collection) {
     let cost = 0
     for(let i = 0; i < collection.length; i++) {
-      cost += collection[i].cost * collection[i].qty
+      if(collection[i].qty > 1) {
+        cost += collection[i].cost * collection[i].qty-1
+      }
+      
     }
     return cost
   }
@@ -71,6 +82,10 @@ const reducer = (state = initialState,action)=> {
       }
       return state
     }
+    case "ADD_RECORD":{
+      state.records.focus.push(action.payload)
+      return state
+    }
   }
   return state
 }
@@ -81,6 +96,7 @@ const mapStateToProps = (state) => {
     collections: state.collecitons,
     test: state.test,
     player: state.player,
+    focus: state.records.focus
   }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -92,6 +108,10 @@ const mapDispatchToProps = (dispatch) =>{
     addExp : (rate) => dispatch({
       type: "ADD_EXP",
       payload: rate,
+    }),
+    addRecord:(record) => dispatch({
+      type:"ADD_RECORD",
+      payload:record
     })
   }
 }
@@ -119,6 +139,7 @@ const Stack = createStackNavigator();
 function DraweContainer () {
   const Home = connect(mapStateToProps,mapDispatchToProps)(HomeScreen)
   const Collection  = connect(mapStateToProps,mapDispatchToProps)(CollectionScreen)
+  const Historycal = connect(mapStateToProps,mapDispatchToProps)(History)
   return (
     <Drawer.Navigator initialRouteName="Home" drawerContent={props => {
       return (
@@ -131,6 +152,7 @@ function DraweContainer () {
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
         <Drawer.Screen name="Collection" component={Collection} />
+        <Drawer.Screen name="History" component={Historycal} />
         
       </Drawer.Navigator>
   )

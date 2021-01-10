@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import moment from 'moment'; 
+
 import { Alert,View,AppState} from 'react-native';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import AppHeader from  "./Header"
@@ -10,8 +12,10 @@ export default class TimerScreen extends Component {
     this.state = {
         coutDownMins: 1,
         timer:null,
+        expTimer:null,
         appState: AppState.currentState,
         status:"idle",
+        time: 0,
         lootFish: [],
     };
   }
@@ -43,26 +47,40 @@ export default class TimerScreen extends Component {
     //开始计时
     let parent = this
     
+    let expTimer = setInterval(()=> {
+      this.props.addExp(Config["30MinsExpRate"])
+      this.giveFish()
+      
+    },1000*60*30)
+
     let timer = setInterval(()=> {
       if(parent.state.coutDownMins <= 0 ){ 
         clearInterval(timer)
+        clearInterval(expTimer)
+        
+        //debug
         this.giveFish()
-        this.props.addExp(Config["30MinsExpRate"])
+        //enddebug
+
+        let totalOwn = 0
+        for(let i =0; i < this.state.lootFish.length; i++) {
+          totalOwn += this.state.lootFish[i].cost
+        }
+        this.props.addRecord( {time: this.props.route.params.timer,success:true,type:this.props.route.params.tag,own: totalOwn,date:moment().format("lll")})
+        
+        
         this.props.navigation.pop()
         this.props.navigation.navigate("LootScreen",{rewards:this.state.lootFish})
         
         return
       }
-      parent.setState({coutDownMins:parent.state.coutDownMins-1})
+      parent.setState({coutDownMins:parent.state.coutDownMins-1,time: this.state.time+1})
     },1000)
 
     //每30 Mins给玩家 Exp
-    setInterval(()=> {
-      this.props.addExp(5)
-      parent.setState({coutDownMins:parent.state.coutDownMins-1})
-    },1000*60*30)
+  
 
-    this.setState({timer:timer})
+    this.setState({timer:timer,expTimer:expTimer})
     AppState.addEventListener('change', this._handleAppStateChange);
 
   }
@@ -73,6 +91,8 @@ export default class TimerScreen extends Component {
   _handleAppStateChange = (nextAppState) => {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       clearInterval(this.state.timer)
+      clearInterval(this.state.expTimer)
+      this.props.addRecord( {time: this.props.route.params.timer,success:false,type:this.props.route.params.tag,own: 0,date:moment().format("lll")})
       this.setState({status:"fail"})
     }
     this.setState({appState: nextAppState});

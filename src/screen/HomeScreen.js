@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import moment from 'moment'; 
+
 import {View} from "react-native"
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -92,6 +94,7 @@ export default class Home extends Component {
              )
              this.props.addExp(5)
               this.forceUpdate()
+              this.props.addRecord( {time: 10,success:true,type:"Study",own: 5,date:moment().format("lll")})
           }}>
             <Text>Test</Text>
             
