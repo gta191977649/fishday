@@ -1,5 +1,8 @@
 {
-    "android": {
-      "package": "com.sparrow.fishday"
-    }
+  "android": {
+    "package": "com.sparrow.fishday"
+  },
+  "ios": {
+    "bundleIdentifier": "com.sparrow.fishday"
+  }
 }
