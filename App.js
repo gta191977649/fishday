@@ -150,7 +150,7 @@ function DraweContainer () {
       )
       }}>
         <Drawer.Screen name="Home" component={Home} />
-        <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+        
         <Drawer.Screen name="Collection" component={Collection} />
         <Drawer.Screen name="History" component={Historycal} />
         
